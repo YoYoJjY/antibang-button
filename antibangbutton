@@ -1,0 +1,35 @@
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+local screenGui = Instance.new("ScreenGui", playerGui)
+local button = Instance.new("TextButton", screenGui)
+
+-- Button properties
+button.Size = UDim2.new(0, 200, 0, 50)
+button.Position = UDim2.new(1, -210, 0.5, -25)  -- Right middle position
+button.Text = "Antibang: Off"
+button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Green color
+button.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text
+
+local isActive = false
+local lastPosition = Vector3.new(0, 0, 0)
+
+-- Function to toggle the AntiBang state
+local function toggleAntiBang()
+    isActive = not isActive
+
+    if isActive then
+        -- Store the last position
+        lastPosition = player.Character and player.Character.PrimaryPart.Position or Vector3.new(0, 0, 0)
+        
+        button.Text = "Antibang: On"
+        button.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red color
+        player.Character:SetPrimaryPartCFrame(CFrame.new(-179, -496, -3))  -- Teleport to new position
+    else
+        button.Text = "Antibang: Off"
+        button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Green color
+        player.Character:SetPrimaryPartCFrame(CFrame.new(lastPosition))  -- Return to last position
+    end
+end
+
+-- Connect the button click to the toggle function
+button.MouseButton1Click:Connect(toggleAntiBang)
